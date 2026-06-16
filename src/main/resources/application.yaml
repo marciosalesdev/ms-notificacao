@@ -2,8 +2,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: marciosalesdevelop@gmail.com
-    password: sqzf ufql njbo iqkl
+    username: ${EMAIL_REMETENTE}
+    password: ${EMAIL_PASSWORD}
     protocol: smtp
     properties:
       mail:
@@ -22,7 +22,10 @@ spring:
     thymeleaf:
       enable: true
 
-  envio:
-    email:
-      remetente:
-      nomeRemetente:
+envio:
+  email:
+    remetente: ${EMAIL_REMETENTE}
+    nomeRemetente: 'Marcio Sales Develop'
+
+server:
+  port: 8083
