@@ -1,6 +1,7 @@
 package com.marciosalesdev.ms_notificacao.business;
 
 import com.marciosalesdev.ms_notificacao.business.dto.TarefasDTO;
+import com.marciosalesdev.ms_notificacao.controller.EmailController;
 import com.marciosalesdev.ms_notificacao.infrastructure.exception.EmailException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -24,7 +25,7 @@ public class EmailService {
     private final TemplateEngine templateEngine;
 
     @Value("${envio.email.remetente}")
-    private String envioEmailRemetente;
+    private String remetente;
 
     @Value("${envio.email.nomeRemetente}")
     private String nomeRemetente;
@@ -34,7 +35,7 @@ public class EmailService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
 
-            mimeMessageHelper.setFrom(new InternetAddress(envioEmailRemetente, nomeRemetente));
+            mimeMessageHelper.setFrom(new InternetAddress(remetente, nomeRemetente));
             mimeMessageHelper.setTo(InternetAddress.parse(tarefaDto.getEmailUsuario()));
             mimeMessageHelper.setSubject("Notificação de Tarefa");
 
@@ -42,7 +43,7 @@ public class EmailService {
             context.setVariable("nomeTarefa", tarefaDto.getNomeTarefa());
             context.setVariable("dataEvento", tarefaDto.getDataEvento());
             context.setVariable("descricao", tarefaDto.getDescricao());
-            String template = templateEngine.process("EmailTemplate", context);
+            String template = templateEngine.process("notificacao", context);
             mimeMessageHelper.setText(template, true);
             javaMailSender.send(message);
 
